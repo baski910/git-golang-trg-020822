@@ -1,0 +1,7 @@
+<h1>
+    {{ .Title }}
+</h1>
+<form action="/save/{{ .Title }}" method="post">
+    <textarea name="body" id="" cols="30" rows="10">{{ printf "%s" .Body }}</textarea>
+    <div> <input type="submit" value="save"></div>
+</form>
