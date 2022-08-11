@@ -25,11 +25,22 @@ func main() {
 		insertStmt := `insert into "t1"("id","name") values(1,'bob')`
 		_, e := db.Exec(insertStmt)
 	*/
-	insertStmt := `insert into "t1"("id","name") values($1,$2)`
-	_, e := db.Exec(insertStmt, 2, "tom")
+	/*
+		insertStmt := `insert into "t1"("id","name") values($1,$2)`
+		_, e := db.Exec(insertStmt, 2, "tom")
 
-	if e != nil {
-		log.Fatal("error inserting record")
+		if e != nil {
+			log.Fatal("error inserting record")
+		}
+		fmt.Println("record inserted")
+	*/
+	rows, err := db.Query(`SELECT * from t1`)
+	defer rows.Close()
+	for rows.Next() {
+		var name string
+		var id int
+		err = rows.Scan(&id, &name)
+		fmt.Println(name, id)
 	}
-	fmt.Println("record inserted")
+
 }
