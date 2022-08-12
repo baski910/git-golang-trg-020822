@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
+	"io/ioutil"
 )
 
 
