@@ -47,5 +47,22 @@ func GetMethod(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostMethod(w http.ResponseWriter, r *http.Request) {
+	r *http.Request) {
+	// 1. connect to db
+	db := NewCon()
+	// 2. create varible of type product
+	var product Product
+	// 3. assign the values posted to the above variable
+	json.NewDecoder(r.Body).Decode(&product)
+	defer r.Body.Close() // close the stream
+	//4. create a new record using the posted value
+	if result := db.Create(&product); result.Error != nil {
+		fmt.Println("unable to create product")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(&product)
 	fmt.Fprintf(w, "Post method called")
 }
