@@ -28,11 +28,12 @@ func NewCon() *gorm.DB {
 
 func main() {
 	router := mux.NewRouter()
-
+    handler = corsMiddleware(router)
 	router.HandleFunc("/api/products", GetMethod).Methods("GET")
 	router.HandleFunc("/api/products", PostMethod).Methods("POST")
 	log.Println("server started at 8010")
-	log.Fatal(http.ListenAndServe(":8010", router))
+	log.Fatal(http.ListenAndServe(":8010", handler))
+	//log.Fatal(http.ListenAndServe(":8010", router))
 }
 
 func GetMethod(w http.ResponseWriter, r *http.Request) {
@@ -66,3 +67,12 @@ func PostMethod(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&product)
 	fmt.Fprintf(w, "Post method called")
 }
+
+func corsMiddleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Header().Set("Access-Control-Allow-Origin", "*")
+        next.ServeHTTP(w, r)
+    })
+}
+
+	
